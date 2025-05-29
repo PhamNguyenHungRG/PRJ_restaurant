@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 
 
-const KitchenView = () => {
+const KitchenView = ({ triggerReload }) => {
     const [ordersByBill, setOrdersByBill] = useState([]);
     const [warningOrders, setWarningOrders] = useState([]);
 
@@ -62,17 +62,26 @@ const KitchenView = () => {
         }
     };
 
+    // const startCooking = async (id) => {
+    //     try {
+    //         await axios.post(`http://localhost:8000/api/orders/startcooking/${id}`);
+    //         fetchOrders(); // Cập nhật lại danh sách sau khi thay đổi
+    //     } catch (error) {
+    //         console.error("Lỗi khi xác nhận nấu:", error.response?.data || error.message);
+    //     }
+    // };
     const startCooking = async (id) => {
         try {
             await axios.post(`http://localhost:8000/api/orders/startcooking/${id}`);
-            fetchOrders(); // Cập nhật lại danh sách sau khi thay đổi
+            fetchOrders();
+            triggerReload(); // Gửi tín hiệu reload
         } catch (error) {
-            console.error("Lỗi khi xác nhận nấu:", error.response?.data || error.message);
+            console.error(error);
         }
     };
 
 
-  const styles = {
+    const styles = {
         container: {
             backgroundColor: '#1a1a2e',
             color: '#f5f5f5',

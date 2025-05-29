@@ -7,7 +7,9 @@ use App\Http\Controllers\OrderController;
 use App\Http\Controllers\OrderDetailController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\CashierController;
 
+Route::get('/dashboard-data', [DashboardController::class, 'dashboardData']);
 Route::prefix('dashboard')->group(function () {
     // Food
     Route::get('/foods', [DashboardController::class, 'getFoods']);
@@ -60,3 +62,14 @@ Route::post('/orders/startcooking/{id}', [OrderDetailController::class, 'startCo
 Route::delete('/order-details/{id}', [OrderDetailController::class, 'destroy']);
 Route::get('/order-details/pending-ready', [OrderDetailController::class, 'getPendingReady']);
 Route::post('/login', [AuthController::class, 'login']);
+
+// Bill routes
+
+Route::prefix('cashier')->group(function () {
+    Route::get('/orders', [CashierController::class, 'index']);             // Danh sách hóa đơn chưa thanh toán
+    Route::get('/orders/{id}', [CashierController::class, 'show']);         // Lấy chi tiết hóa đơn
+    Route::post('/orders/{id}/complete', [CashierController::class, 'complete']); // Hoàn tất thanh toán
+});
+
+
+

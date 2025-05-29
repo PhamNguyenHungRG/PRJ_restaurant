@@ -10,10 +10,10 @@ const AdminLayout = ({ children }) => {
         { path: '/food', label: 'Food' },
         { path: '/category', label: 'Category' },
         { path: '/user', label: 'User' },
-        // { path: '/menu', label: 'Menu' },
-        // { path: '/review', label: 'Review' },
-        // { path: '/settings', label: 'Settings' },
-        // { path: '/payment', label: 'Payment' },
+        { path: '/ingredient', label: 'IngredientList' },
+        { path: '/inventory', label: 'InventoryStats'},
+
+
     ];
 
     return (

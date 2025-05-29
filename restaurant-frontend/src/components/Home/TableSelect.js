@@ -3,15 +3,15 @@ import axios from 'axios';
 import { useSearchParams } from 'react-router-dom';
 
 const TableSelect = ({
-                         setNewTableId,
-                         newTableId,
-                         setSelectedTable,
-                         setOrderItems,
-                         orderItems,
-                         setShowChangeTableModal,
-                         selectedTable,
-                         fetchTables // ✅ thêm
-                     }) => {
+    setNewTableId,
+    newTableId,
+    setSelectedTable,
+    setOrderItems,
+    orderItems,
+    setShowChangeTableModal,
+    selectedTable,
+    fetchTables // ✅ thêm
+}) => {
     const [availableTables, setAvailableTables] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -87,8 +87,13 @@ const TableSelect = ({
             ) : availableTables.length === 0 ? (
                 <p>Hiện tại không có bàn trống nào.</p>
             ) : (
-                <div>
-                    <select onChange={e => setNewTableId(e.target.value)} value={newTableId}>
+                <div className="d-flex align-items-center mt-3">
+                    <select
+                        onChange={e => setNewTableId(e.target.value)}
+                        value={newTableId}
+                        className="form-select me-2"
+                        style={{ width: '150px' }}  // chiều rộng cố định 150px
+                    >
                         <option value="">Chọn bàn</option>
                         {availableTables.map(table => (
                             <option key={table.id} value={table.id}>
@@ -97,10 +102,14 @@ const TableSelect = ({
                         ))}
                     </select>
 
-                    <button onClick={handleChangeTable}>
+                    <button onClick={handleChangeTable} >
                         Xác nhận chuyển bàn
                     </button>
+                    <button onClick={() => setShowChangeTableModal(false)} style={{ marginLeft: '10px', backgroundColor: 'red', color: 'white' }}>
+                        Hủy
+                    </button>
                 </div>
+
             )}
         </div>
     );

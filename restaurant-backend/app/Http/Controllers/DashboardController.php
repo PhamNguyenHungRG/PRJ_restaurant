@@ -7,6 +7,10 @@ use App\Models\Category;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use App\Models\Order;
+use App\Models\OrderDetail;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class DashboardController extends Controller
 {
@@ -38,7 +42,7 @@ class DashboardController extends Controller
     public function updateFood(Request $request, $id)
     {
         try {
-            \Log::info('📥 Dữ liệu nhận được từ frontend:', $request->all());
+            Log::info('📥 Dữ liệu nhận được từ frontend:', $request->all());
 
             $food = Food::findOrFail($id);
 
@@ -72,7 +76,7 @@ class DashboardController extends Controller
 
             return response()->json(['message' => '✅ Cập nhật món thành công']);
         } catch (\Throwable $e) {
-            \Log::error('❌ Lỗi khi cập nhật món ăn:', ['error' => $e->getMessage()]);
+            Log::error('❌ Lỗi khi cập nhật món ăn:', ['error' => $e->getMessage()]);
             return response()->json(['error' => $e->getMessage()], 500);
         }
     }
@@ -148,4 +152,51 @@ class DashboardController extends Controller
         $user->save();
         return response()->json(['active' => $user->active]);
     }
+    public function dashboardData()
+    {
+        // 1. Tổng doanh thu
+        $totalRevenue = OrderDetail::join('orders', 'orders.id', '=', 'order_details.order_id')
+            ->join('foods', 'foods.id', '=', 'order_details.food_id')
+            ->where('orders.status', '!=', 'cancelled')
+            ->sum(DB::raw('order_details.quantity * foods.price'));
+
+        // 2. Top 5 món ăn
+        $topFoods = OrderDetail::select('food_id', DB::raw('SUM(quantity) as total_quantity'))
+            ->groupBy('food_id')
+            ->orderByDesc('total_quantity')
+            ->take(5)
+            ->with('food') // assuming has relation `food`
+            ->get()
+            ->map(function($item) {
+                return [
+                    'name' => $item->food->name,
+                    'price' => $item->food->price,
+                    'quantity' => $item->total_quantity,
+                ];
+            });
+
+        // 3. Order theo ngày trong tuần
+        $ordersByDay = Order::select(DB::raw('DAYNAME(created_at) as day'), DB::raw('COUNT(*) as count'))
+            ->groupBy(DB::raw('DAYNAME(created_at)'))
+            ->get();
+
+        // 4. Phân bố thời gian
+        $ordersByTime = Order::select(DB::raw('HOUR(created_at) as hour'))
+            ->get()
+            ->groupBy(function($order) {
+                $hour = $order->hour;
+                if ($hour >= 6 && $hour < 12) return 'Morning';
+                if ($hour >= 12 && $hour < 18) return 'Afternoon';
+                return 'Evening';
+            })
+            ->map->count();
+
+        return response()->json([
+            'totalRevenue' => $totalRevenue,
+            'topFoods' => $topFoods,
+            'ordersByDay' => $ordersByDay,
+            'ordersByTime' => $ordersByTime,
+        ]);
+    }
+
 }

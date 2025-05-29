@@ -14,8 +14,8 @@ class CreateOrdersTable extends Migration
             $table->unsignedBigInteger('table_id');
             $table->foreign('table_id')->references('id')->on('tables');
             $table->enum('status', ['pending', 'sent', 'completed', 'cancelled'])->default('pending');
-
             $table->timestamps();
+            $table->boolean('payment_status')->default(false);
         });
     }
 

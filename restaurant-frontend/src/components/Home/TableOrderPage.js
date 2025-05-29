@@ -381,14 +381,13 @@ const TableOrderPage = () => {
                     {/* Table Select Modal */}
                     {showChangeTableModal && (
                         <TableSelect
-                            selectedTable={selectedTable}
-                            setNewTableId={setNewTableId}
                             newTableId={newTableId}
-                            setOrderItems={setOrderItems}
+                            setNewTableId={setNewTableId}
+                            selectedTable={selectedTable}
                             setSelectedTable={setSelectedTable}
                             orderItems={orderItems}
+                            setOrderItems={setOrderItems}
                             setShowChangeTableModal={setShowChangeTableModal}
-                            fetchAllOrderItemsByTable={fetchAllOrderItemsByTable}
                             fetchTables={fetchTables}
                         />
 
@@ -440,7 +439,7 @@ const TableOrderPage = () => {
 
             {/* CSS */}
             <style>
-{`
+                {`
 :root {
     --primary-bg: #f4f1ee;
     --accent-green: #4b6b2f;
@@ -455,19 +454,20 @@ const TableOrderPage = () => {
 
 /* Tổng thể giao diện */
 body {
-    font-family: var(--font-sans);
-    color: var(--text-dark);
-    background-color: var(--primary-bg);
-    margin: 0;
-    padding: 0;
+  padding-bottom: 80px; /* Bằng đúng chiều cao footer */
+  margin: 0;
+  font-family: var(--font-sans);
+  background-color: var(--primary-bg);
+  color: var(--text-dark);
 }
+
 
 /* Khối chứa menu và order */
 .order-container {
     display: flex;
     gap: 28px;
     align-items: flex-start;
-    max-height: 85vh;
+    max-height: 100vh;
     overflow-y: auto;
     background-color: var(--primary-bg);
     padding: 24px;
@@ -684,9 +684,10 @@ button:hover {
         font-size: 14px;
         padding: 10px 16px;
     }
+        
 }
 `}
-</style>
+            </style>
         </div>
     );
     return (

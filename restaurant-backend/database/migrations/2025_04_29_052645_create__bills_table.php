@@ -19,7 +19,7 @@ return new class extends Migration
             $table->foreign('order_id')->references('id')->on('orders');
             $table->foreign('user_id')->references('id')->on('users');
             $table->decimal('amount', 10, 0);
-            $table->enum('status', ['tiền mặt', 'thẻ','momo'])->default('tiền mặt');
+            $table->enum('status', ['tiền mặt', 'chuyển khoản'])->default('tiền mặt');
             $table->dateTime('paid_at');
             $table->timestamps();
         });

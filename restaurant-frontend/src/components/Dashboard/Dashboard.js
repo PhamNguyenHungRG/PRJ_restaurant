@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
 import AdminLayout from './AdminLayout';
-import { Bar, Doughnut, Line } from 'react-chartjs-2';
+import {Doughnut, Line } from 'react-chartjs-2';
 import {
     Chart as ChartJS,
     CategoryScale,
@@ -25,84 +26,83 @@ ChartJS.register(
 );
 
 const Dashboard = () => {
-    const barData = {
-        labels: ['01', '02', '03', '04', '05', '06', '07'],
-        datasets: [
-            {
-                label: 'Last 6 days',
-                data: [30, 40, 45, 50, 40, 60, 70],
-                backgroundColor: '#4f46e5',
-            },
-            {
-                label: 'Last week',
-                data: [25, 35, 30, 40, 30, 45, 50],
-                backgroundColor: '#cbd5e1',
-            },
-        ],
-    };
+    const [totalRevenue, setTotalRevenue] = useState(0);
+    const [topFoods, setTopFoods] = useState([]);
+    const [ordersByDay, setOrdersByDay] = useState([]);
+    const [ordersByTime, setOrdersByTime] = useState({});
+
+    useEffect(() => {
+        axios.get('http://localhost:8000/api/dashboard-data')
+            .then(res => {
+                setTotalRevenue(res.data.totalRevenue);
+                setTopFoods(res.data.topFoods);
+                setOrdersByDay(res.data.ordersByDay);
+                setOrdersByTime(res.data.ordersByTime);
+            });
+    }, []);
 
     const doughnutData = {
-        labels: ['Afternoon', 'Evening', 'Morning'],
+        labels: ['Morning', 'Afternoon', 'Evening'],
         datasets: [
             {
-                data: [40, 32, 28],
+                data: ['Morning', 'Afternoon', 'Evening'].map(time => ordersByTime[time] || 0),
                 backgroundColor: ['#6366f1', '#a5b4fc', '#e0e7ff'],
+                borderWidth: 2,
             },
         ],
     };
 
     const lineData = {
-        labels: ['01', '02', '03', '04', '05', '06'],
+        labels: ordersByDay.map(item => item.day),
         datasets: [
             {
-                label: 'Last 6 days',
-                data: [10, 20, 25, 30, 28, 40],
+                label: 'Orders by Day',
+                data: ordersByDay.map(item => item.count),
                 borderColor: '#4f46e5',
+                backgroundColor: 'rgba(79, 70, 229, 0.1)',
                 tension: 0.4,
-            },
-            {
-                label: 'Last week',
-                data: [15, 18, 20, 25, 22, 35],
-                borderColor: '#94a3b8',
-                tension: 0.4,
-            },
+                fill: true,
+                pointRadius: 4,
+            }
         ],
     };
 
     return (
         <AdminLayout>
-            <h2 className="fw-bold mb-3">📊 Dashboard</h2>
+            <h2 className="fw-bold mb-4 fs-3">📊 Dashboard Overview</h2>
 
             <div className="row g-4">
                 <div className="col-md-6">
-                    <div className="card shadow-sm p-3">
-                        <h6 className="fw-bold">Revenue</h6>
-                        <p className="text-muted">IDR 7.852.000</p>
-                        <Bar data={barData} />
+                    <div className="card shadow rounded-4 p-4 border-0 h-100">
+                        <h6 className="fw-semibold fs-5 mb-2">💰 Revenue</h6>
+                        <p className="text-muted mb-3 fs-6">IDR {totalRevenue.toLocaleString()}</p>
+                        {/* Optional: Bar chart comparing revenue per day/week */}
                     </div>
                 </div>
+
                 <div className="col-md-6">
-                    <div className="card shadow-sm p-3">
-                        <h6 className="fw-bold">Order Time</h6>
+                    <div className="card shadow rounded-4 p-4 border-0 h-100">
+                        <h6 className="fw-semibold fs-5 mb-3">🕒 Order Time Distribution</h6>
                         <Doughnut data={doughnutData} />
                     </div>
                 </div>
 
                 <div className="col-md-6">
-                    <div className="card shadow-sm p-3">
-                        <h6 className="fw-bold">Order Trend</h6>
+                    <div className="card shadow rounded-4 p-4 border-0 h-100">
+                        <h6 className="fw-semibold fs-5 mb-3">📈 Orders by Day</h6>
                         <Line data={lineData} />
                     </div>
                 </div>
 
                 <div className="col-md-6">
-                    <div className="card shadow-sm p-3">
-                        <h6 className="fw-bold">Most Ordered Food</h6>
+                    <div className="card shadow rounded-4 p-4 border-0 h-100">
+                        <h6 className="fw-semibold fs-5 mb-3">🍽️ Most Ordered Foods</h6>
                         <ul className="list-group list-group-flush">
-                            <li className="list-group-item">🥗 Fresh Salad Bowl - IDR 45.000</li>
-                            <li className="list-group-item">🍜 Chicken Noodles - IDR 75.000</li>
-                            <li className="list-group-item">🍹 Smoothie Fruits - IDR 45.000</li>
-                            <li className="list-group-item">🍗 Hot Chicken Wings - IDR 45.000</li>
+                            {topFoods.map((food, index) => (
+                                <li key={index} className="list-group-item border-0 ps-0">
+                                    {food.name} – <strong>IDR {food.price.toLocaleString()}</strong> ({food.quantity}x)
+                                </li>
+                            ))}
                         </ul>
                     </div>
                 </div>

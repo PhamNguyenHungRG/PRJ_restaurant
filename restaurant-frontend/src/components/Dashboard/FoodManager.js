@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { toast, ToastContainer } from 'react-toastify';
+import axios from 'axios';
+import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+
 
 const FoodManager = () => {
     const [foods, setFoods] = useState([]);
@@ -18,13 +20,11 @@ const FoodManager = () => {
         fetchCategories();
     }, []);
 
-    // Fetch all foods from the backend
     const fetchFoods = async () => {
         setLoading(true);
         try {
-            const res = await fetch('http://localhost:8000/api/dashboard/foods');
-            const data = await res.json();
-            setFoods(data);
+            const res = await axios.get('http://localhost:8000/api/dashboard/foods');
+            setFoods(res.data);
         } catch (err) {
             console.error('Lỗi tải món ăn:', err);
             toast.error('Lỗi tải danh sách món ăn');
@@ -33,12 +33,10 @@ const FoodManager = () => {
         }
     };
 
-    // Fetch all categories
     const fetchCategories = async () => {
         try {
-            const res = await fetch('http://localhost:8000/api/dashboard/categories');
-            const data = await res.json();
-            setCategories(data.filter(c => c.status));
+            const res = await axios.get('http://localhost:8000/api/dashboard/categories');
+            setCategories(res.data.filter(c => c.status));
         } catch (err) {
             console.error('Lỗi tải danh mục:', err);
             toast.error('Lỗi tải danh mục');
@@ -60,35 +58,22 @@ const FoodManager = () => {
             ? `http://localhost:8000/api/dashboard/foods/${editingId}`
             : 'http://localhost:8000/api/dashboard/foods';
 
-        // Sử dụng PUT nếu có editingId, nghĩa là đang chỉnh sửa món ăn
-        const method = editingId ? 'PUT' : 'POST';
-        if (editingId) formData.append('_method', 'PUT'); // Nếu có editingId, gửi PUT (override method)
-
         try {
-            const response = await fetch(url, {
-                method: method,
-                body: formData,
+            const response = await axios.post(url, formData, {
+                headers: { 'Content-Type': 'multipart/form-data' },
+                ...(editingId && { params: { _method: 'PUT' } })
             });
-
-            const result = await response.json();
-            if (!response.ok) {
-                console.error('Chi tiết lỗi:', result);
-                toast.error(result.message || result.error || 'Cập nhật thất bại');
-                return;
-            }
 
             toast.success(editingId ? '✅ Cập nhật món thành công' : '✅ Đã thêm món mới');
             setForm({ name: '', price: '', category_id: '', image: null, oldImage: '' });
             setEditingId(null);
-            fetchFoods(); // Cập nhật lại danh sách món ăn sau khi thêm hoặc cập nhật
+            fetchFoods();
         } catch (err) {
             console.error('Lỗi gửi form:', err);
-            toast.error('❌ Lỗi kết nối đến máy chủ');
+            toast.error('❌ Cập nhật thất bại');
         }
     };
 
-
-    // Handle editing food item
     const handleEdit = (food) => {
         setForm({
             name: food.name,
@@ -100,15 +85,12 @@ const FoodManager = () => {
         setEditingId(food.id);
     };
 
-    // Toggle the active status of a food item
     const handleToggle = async (id) => {
         const confirm = window.confirm('Bạn có chắc muốn thay đổi trạng thái món này?');
         if (!confirm) return;
 
         try {
-            await fetch(`http://localhost:8000/api/dashboard/foods/${id}/toggle`, {
-                method: 'PATCH',
-            });
+            await axios.patch(`http://localhost:8000/api/dashboard/foods/${id}/toggle`);
             toast.success('Đã cập nhật trạng thái món');
             fetchFoods();
         } catch (err) {
@@ -117,7 +99,6 @@ const FoodManager = () => {
         }
     };
 
-    // Pagination logic
     const indexOfLastItem = currentPage * itemsPerPage;
     const indexOfFirstItem = indexOfLastItem - itemsPerPage;
     const currentFoods = foods.slice(indexOfFirstItem, indexOfLastItem);

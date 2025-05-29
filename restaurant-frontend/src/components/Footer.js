@@ -1,61 +1,159 @@
 import React from 'react';
 import { useSearchParams } from 'react-router-dom';
+import { FaHome, FaTags, FaBell, FaSignInAlt, FaSignOutAlt } from 'react-icons/fa';
 
 const Footer = ({ user, onLogout, onShowLogin }) => {
-    const [searchParams, setSearchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams();
 
-    const handleGoHome = () => {
-        const newParams = new URLSearchParams(searchParams);
-        newParams.delete('table_id'); // Xóa table_id khỏi URL
-        setSearchParams(newParams);  // Cập nhật URL, React sẽ tự rerender
-    };
+  const handleGoHome = () => {
+    const newParams = new URLSearchParams(searchParams);
+    newParams.delete('table_id');
+    setSearchParams(newParams);
+  };
 
-    return (
-        <div style={footerStyle}>
-            <span onClick={handleGoHome} style={linkStyle}>Trang chủ</span>
-            <a href="/promotions" style={linkStyle}>Khuyến mãi</a>
-            <a href="/notifications" style={linkStyle}>Thông báo</a>
-            <div style={accountStyle}>
-                {user ? (
-                    <span onClick={onLogout} style={logoutStyle}>Đăng xuất</span>
-                ) : (
-                    <span onClick={onShowLogin} style={logoutStyle}>Đăng nhập</span>
-                )}
-            </div>
+  return (
+    <footer className="footer-container">
+      <div className="footer-content">
+        {/* Navigation Items */}
+        <div className="footer-nav">
+          <div className="footer-item" role="button" onClick={handleGoHome}>
+            <FaHome size={20} />
+            <div>Trang chủ</div>
+          </div>
+          <a className="footer-item" href="/promotions">
+            <FaTags size={20} />
+            <div>Khuyến mãi</div>
+          </a>
+          <a className="footer-item" href="/notifications">
+            <FaBell size={20} />
+            <div>Thông báo</div>
+          </a>
         </div>
-    );
-};
 
-const footerStyle = {
-    display: 'flex',
-    justifyContent: 'space-around',
-    alignItems: 'center',
-    padding: '10px 0',
-    background: '#f8f8f8',
-    borderTop: '1px solid #ccc',
-    position: 'fixed',
-    bottom: 0,
-    width: '100%',
-    zIndex: 999,
-    flexWrap: 'wrap',
-    gap: '10px',
-};
+        {/* Auth Button */}
+        <div className="footer-auth">
+          {user ? (
+            <button className="footer-button" onClick={onLogout}>
+              <FaSignOutAlt /> <span>Đăng xuất</span>
+            </button>
+          ) : (
+            <button className="footer-button" onClick={onShowLogin}>
+              <FaSignInAlt /> <span>Đăng nhập</span>
+            </button>
+          )}
+        </div>
+      </div>
 
-const linkStyle = {
-    cursor: 'pointer',
-    color: '#007bff',
-    fontWeight: 'bold',
-    textDecoration: 'none',
-};
+      {/* Styles */}
+      <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap');
 
-const accountStyle = {
-    cursor: 'pointer',
-    color: '#007bff',
-    fontWeight: 'bold',
-};
+        footer {
+          position: fixed;
+          bottom: 0;
+          left: 0;
+          right: 0;
+          height: 80px;
+          background-color: #fff;
+          border-top: 1px solid #ddd;
+          border-radius: 16px 16px 0 0;
+          z-index: 100;
+          font-family: 'Montserrat', sans-serif;
+        }
 
-const logoutStyle = {
-    textDecoration: 'underline',
+        .footer-container {
+          padding: 12px 20px;
+          box-sizing: border-box;
+        }
+
+        .footer-content {
+          display: flex;
+          justify-content: center; /* căn giữa tổng thể */
+          align-items: center;
+          flex-wrap: nowrap;
+          gap: 40px;
+          width: 100%;
+          max-width: 1200px;
+          margin: 0 auto;
+        }
+
+        .footer-nav {
+          display: flex;
+          gap: 24px;
+          flex: 1;
+          justify-content: center; /* menu ở giữa */
+        }
+
+        .footer-item {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          font-weight: 500;
+          color: #556B2F;
+          cursor: pointer;
+          transition: all 0.2s ease;
+          font-size: 0.9rem;
+          text-decoration: none;
+        }
+
+        .footer-item:hover {
+          color: #92ab67;
+          transform: scale(1.05);
+        }
+
+        .footer-auth {
+          display: flex;
+          justify-content: flex-end; /* đẩy nút ra bên phải */
+          flex-shrink: 0;
+          min-width: 140px;
+        }
+
+        .footer-button {
+          background-color: #556B2F;
+          border: none;
+          color: white;
+          padding: 8px 20px;
+          border-radius: 30px;
+          font-weight: 600;
+          font-size: 0.95rem;
+          display: flex;
+          align-items: center;
+          gap: 10px;
+          cursor: pointer;
+          transition: background 0.3s ease;
+        }
+
+        .footer-button:hover {
+          background-color: #92ab67;
+        }
+
+        /* Responsive cho điện thoại */
+        @media (max-width: 768px) {
+          .footer-content {
+            flex-direction: column;
+            gap: 10px;
+            align-items: center;
+          }
+
+          .footer-nav {
+            width: 100%;
+            justify-content: space-around;
+          }
+
+          .footer-auth {
+            width: 100%;
+            justify-content: center; /* nút căn giữa màn hình nhỏ */
+            min-width: auto;
+          }
+
+          .footer-button {
+            width: 100%;
+            justify-content: center;
+          }
+        }
+      `}</style>
+    </footer>
+  );
 };
 
 export default Footer;
