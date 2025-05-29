@@ -1,6 +1,6 @@
 # Group Information
 
-- **Group Name:** Group 4
+- **Group Name:** Group 6
 - **Group Members:**
   - Phạm Nguyễn Hưng - Student1576000
   - Dinh Tung Lam - Student1565810
