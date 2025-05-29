@@ -6,4 +6,5 @@
   - Dinh Tung Lam - Student1565810
   - Nguyễn Đình Đức Mạnh - Student1580658
 - **Documents reports:** [Link](https://github.com/PhamNguyenHungRG/PRJ_restaurant/blob/main/DocOfPrJ2_Gr6.pdf)
+- **Installation Guide** [Link Drive](https://drive.google.com/file/d/1VVFR09Kukb1iEkHA1cy41dLS3zNLOvvq/view?usp=sharing)
 - **Project demonstration video:** [Link Drive](https://drive.google.com/drive/folders/1mfZNoq9Ut-dH4Y5m6l0GLaF3MJ0yd36L?usp=sharing)
