@@ -1,0 +1,66 @@
+/* src/pages/OrderPage.css */
+
+.order-page {
+    padding: 20px;
+    display: flex;
+    gap: 30px;
+}
+
+.order-left {
+    flex: 1;
+}
+
+.order-box {
+    margin-bottom: 20px;
+    padding: 15px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    max-width: 400px;
+}
+
+.menu-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 15px;
+}
+
+.menu-item {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 10px;
+    background: #f9f9f9;
+}
+
+.quantity-controls {
+    margin-top: 8px;
+    display: flex;
+    align-items: center;
+}
+
+.quantity-controls input {
+    width: 50px;
+    text-align: center;
+    margin: 0 5px;
+}
+
+.order-right {
+    width: 300px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 15px;
+    background: #fff;
+}
+
+.message {
+    margin-top: 20px;
+    color: green;
+    font-weight: bold;
+}
+
+.order-buttons {
+    margin-top: 10px;
+}
+
+.order-buttons button {
+    margin-right: 10px;
+}
