@@ -4,6 +4,10 @@ import axios from 'axios';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
+const goldenColor = '#D4AF37'; // Vàng ánh kim
+const lightYellowBg = '#FFF9E3'; // Vàng nhạt nhẹ nhàng
+const borderRadius = '20px';
+const fontFamily = "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif";
 
 const FoodManager = () => {
     const [foods, setFoods] = useState([]);
@@ -105,16 +109,63 @@ const FoodManager = () => {
     const totalPages = Math.ceil(foods.length / itemsPerPage);
 
     return (
-        <div className="container my-5">
+        <div
+            className="container my-5"
+            style={{
+                backgroundColor: lightYellowBg,
+                borderRadius: borderRadius,
+                border: `2px solid ${goldenColor}`,
+                padding: '2rem',
+                fontFamily: fontFamily,
+            }}
+        >
             <ToastContainer />
             <div className="d-flex justify-content-between align-items-center mb-4">
-                <h2 className="text-primary fw-bold mb-0">📋 Quản lý món ăn</h2>
-                <button className="btn btn-secondary" onClick={() => navigate('/dashboard')}>
+                <h2
+                    style={{
+                        color: goldenColor,
+                        textTransform: 'uppercase',
+                        letterSpacing: '0.15em',
+                        fontWeight: 'bold',
+                    }}
+                >
+                    📋 Quản lý món ăn
+                </h2>
+                <button
+                    className="btn"
+                    onClick={() => navigate('/dashboard')}
+                    style={{
+                        borderRadius: borderRadius,
+                        border: `2px solid ${goldenColor}`,
+                        backgroundColor: 'transparent',
+                        color: goldenColor,
+                        padding: '0.4rem 1rem',
+                        fontWeight: '600',
+                        transition: 'all 0.3s ease',
+                    }}
+                    onMouseEnter={e => {
+                        e.currentTarget.style.backgroundColor = goldenColor;
+                        e.currentTarget.style.color = 'white';
+                        e.currentTarget.style.boxShadow = `0 0 8px ${goldenColor}`;
+                    }}
+                    onMouseLeave={e => {
+                        e.currentTarget.style.backgroundColor = 'transparent';
+                        e.currentTarget.style.color = goldenColor;
+                        e.currentTarget.style.boxShadow = 'none';
+                    }}
+                >
                     ⬅️ Quay về Dashboard
                 </button>
             </div>
 
-            <div className="card shadow-sm p-4 mb-5">
+            <div
+                className="card shadow-sm p-4 mb-5"
+                style={{
+                    borderRadius: borderRadius,
+                    border: `2px solid ${goldenColor}`,
+                    backgroundColor: '#fff',
+                }}
+            >
                 <form onSubmit={handleSubmit} className="row g-3">
                     <div className="col-md-6">
                         <input
@@ -124,6 +175,18 @@ const FoodManager = () => {
                             value={form.name}
                             onChange={(e) => setForm({ ...form, name: e.target.value })}
                             required
+                            style={{
+                                borderRadius: borderRadius,
+                                border: `2px solid ${goldenColor}`,
+                                backgroundColor: lightYellowBg,
+                                color: '#333',
+                                fontWeight: '500',
+                                transition: 'border-color 0.3s ease',
+                            }}
+                            onFocus={e => (e.target.style.borderColor = goldenColor)}
+                            onBlur={e => (e.target.style.borderColor = `2px solid ${goldenColor}`)}
+                            onMouseEnter={e => (e.target.style.borderColor = goldenColor)}
+                            onMouseLeave={e => (e.target.style.borderColor = `2px solid ${goldenColor}`)}
                         />
                     </div>
                     <div className="col-md-6">
@@ -135,6 +198,18 @@ const FoodManager = () => {
                             value={form.price}
                             onChange={(e) => setForm({ ...form, price: e.target.value })}
                             required
+                            style={{
+                                borderRadius: borderRadius,
+                                border: `2px solid ${goldenColor}`,
+                                backgroundColor: lightYellowBg,
+                                color: '#333',
+                                fontWeight: '500',
+                                transition: 'border-color 0.3s ease',
+                            }}
+                            onFocus={e => (e.target.style.borderColor = goldenColor)}
+                            onBlur={e => (e.target.style.borderColor = `2px solid ${goldenColor}`)}
+                            onMouseEnter={e => (e.target.style.borderColor = goldenColor)}
+                            onMouseLeave={e => (e.target.style.borderColor = `2px solid ${goldenColor}`)}
                         />
                     </div>
                     <div className="col-md-6">
@@ -143,6 +218,18 @@ const FoodManager = () => {
                             value={form.category_id}
                             onChange={(e) => setForm({ ...form, category_id: e.target.value })}
                             required
+                            style={{
+                                borderRadius: borderRadius,
+                                border: `2px solid ${goldenColor}`,
+                                backgroundColor: lightYellowBg,
+                                color: '#333',
+                                fontWeight: '500',
+                                transition: 'border-color 0.3s ease',
+                            }}
+                            onFocus={e => (e.target.style.borderColor = goldenColor)}
+                            onBlur={e => (e.target.style.borderColor = `2px solid ${goldenColor}`)}
+                            onMouseEnter={e => (e.target.style.borderColor = goldenColor)}
+                            onMouseLeave={e => (e.target.style.borderColor = `2px solid ${goldenColor}`)}
                         >
                             <option value="">-- Chọn danh mục --</option>
                             {categories.map(c => (
@@ -156,23 +243,59 @@ const FoodManager = () => {
                             className="form-control"
                             accept="image/*"
                             onChange={(e) => setForm({ ...form, image: e.target.files[0] })}
+                            style={{
+                                borderRadius: borderRadius,
+                                border: `2px solid ${goldenColor}`,
+                                backgroundColor: lightYellowBg,
+                                color: '#333',
+                                fontWeight: '500',
+                                transition: 'border-color 0.3s ease',
+                            }}
+                            onFocus={e => (e.target.style.borderColor = goldenColor)}
+                            onBlur={e => (e.target.style.borderColor = `2px solid ${goldenColor}`)}
+                            onMouseEnter={e => (e.target.style.borderColor = goldenColor)}
+                            onMouseLeave={e => (e.target.style.borderColor = `2px solid ${goldenColor}`)}
                         />
                     </div>
 
                     {editingId && form.oldImage && (
                         <div className="col-12">
-                            <label className="form-label">Ảnh hiện tại:</label><br />
+                            <label className="form-label" style={{ fontWeight: '600', color: goldenColor }}>
+                                Ảnh hiện tại:
+                            </label><br />
                             <img
                                 src={`http://localhost:8000/${form.oldImage}`}
                                 alt="Ảnh cũ"
-                                style={{ width: '100px', height: '100px', objectFit: 'cover' }}
+                                style={{ width: '100px', height: '100px', objectFit: 'cover', borderRadius: borderRadius, border: `2px solid ${goldenColor}` }}
                                 className="img-thumbnail"
                             />
                         </div>
                     )}
 
                     <div className="col-12">
-                        <button type="submit" className="btn btn-primary w-100">
+                        <button
+                            type="submit"
+                            className="btn w-100"
+                            style={{
+                                borderRadius: borderRadius,
+                                border: `2px solid ${goldenColor}`,
+                                backgroundColor: lightYellowBg,
+                                color: goldenColor,
+                                fontWeight: '700',
+                                padding: '0.6rem',
+                                transition: 'all 0.3s ease',
+                            }}
+                            onMouseEnter={e => {
+                                e.currentTarget.style.backgroundColor = goldenColor;
+                                e.currentTarget.style.color = 'white';
+                                e.currentTarget.style.boxShadow = `0 0 10px ${goldenColor}`;
+                            }}
+                            onMouseLeave={e => {
+                                e.currentTarget.style.backgroundColor = lightYellowBg;
+                                e.currentTarget.style.color = goldenColor;
+                                e.currentTarget.style.boxShadow = 'none';
+                            }}
+                        >
                             {editingId ? 'Cập nhật món' : 'Thêm món'}
                         </button>
                     </div>
@@ -181,79 +304,156 @@ const FoodManager = () => {
 
             {loading ? (
                 <div className="text-center py-5">
-                    <div className="spinner-border text-primary" role="status" />
-                    <p className="mt-2">Đang tải dữ liệu...</p>
+                    <div
+                        className="spinner-border"
+                        role="status"
+                        style={{ borderColor: goldenColor, borderTopColor: 'transparent' }}
+                    />
+                    <p className="mt-2" style={{ color: goldenColor, fontWeight: '600' }}>
+                        Đang tải dữ liệu...
+                    </p>
                 </div>
             ) : (
                 <>
                     <div className="table-responsive">
-                        <table className="table table-bordered table-striped table-sm table-hover align-middle text-center">
-                            <thead className="table-light">
-                            <tr>
-                                <th>Tên món</th>
-                                <th>Giá</th>
-                                <th>Danh mục</th>
-                                <th>Ảnh</th>
-                                <th>Trạng thái</th>
-                                <th>Hành động</th>
-                            </tr>
+                        <table
+                            className="table table-bordered table-striped table-sm table-hover align-middle text-center"
+                            style={{
+                                borderRadius: borderRadius,
+                                border: `1px solid ${goldenColor}`,
+                                overflow: 'hidden',
+                                fontFamily: fontFamily,
+                            }}
+                        >
+                            <thead
+                                style={{
+                                    backgroundColor: goldenColor,
+                                    color: '#fff',
+                                    borderRadius: borderRadius,
+                                }}
+                            >
+                                <tr>
+                                    {['Tên món', 'Giá', 'Danh mục', 'Ảnh', 'Trạng thái', 'Hành động'].map((th, idx) => (
+                                        <th
+                                            key={idx}
+                                            style={{ fontWeight: '700', userSelect: 'none' }}
+                                        >
+                                            {th}
+                                        </th>
+                                    ))}
+                                </tr>
                             </thead>
                             <tbody>
-                            {currentFoods.map(food => (
-                                <tr key={food.id}>
-                                    <td>{food.name}</td>
-                                    <td>{new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(food.price)}</td>
-                                    <td>{food.category?.name}</td>
-                                    <td>
-                                        {food.image ? (
+                                {currentFoods.map(food => (
+                                    <tr
+                                        key={food.id}
+                                        style={{
+                                            backgroundColor: '#fff',
+                                            transition: 'background-color 0.3s ease',
+                                        }}
+                                        onMouseEnter={e => (e.currentTarget.style.backgroundColor = lightYellowBg)}
+                                        onMouseLeave={e => (e.currentTarget.style.backgroundColor = '#fff')}
+                                    >
+                                        <td style={{ verticalAlign: 'middle' }}>{food.name}</td>
+                                        <td style={{ verticalAlign: 'middle' }}>
+                                            {Number(food.price).toLocaleString()} ₫
+                                        </td>
+                                        <td style={{ verticalAlign: 'middle' }}>{food.category?.name || 'Không xác định'}</td>
+                                        <td>
                                             <img
                                                 src={`http://localhost:8000/${food.image}`}
                                                 alt={food.name}
-                                                className="img-thumbnail"
-                                                style={{ width: '64px', height: '64px', objectFit: 'cover' }}
+                                                style={{
+                                                    width: '100px',
+                                                    height: '100px',
+                                                    objectFit: 'cover',
+                                                    borderRadius: borderRadius,
+                                                    border: `1.5px solid ${goldenColor}`,
+                                                }}
                                             />
-                                        ) : (
-                                            <span className="text-muted">Không có ảnh</span>
-                                        )}
-                                    </td>
-                                    <td>
-                                            <span className={`badge ${food.active ? 'bg-success' : 'bg-secondary'}`}>
-                                                {food.active ? 'Hiện' : 'Ẩn'}
+                                        </td>
+                                        <td>
+                                            <span
+                                                onClick={() => handleToggle(food.id)}
+                                                style={{
+                                                    cursor: 'pointer',
+                                                    padding: '0.3rem 0.7rem',
+                                                    borderRadius: borderRadius,
+                                                    backgroundColor: food.status ? '#4CAF50' : '#B22222',
+                                                    color: 'white',
+                                                    fontWeight: '600',
+                                                    userSelect: 'none',
+                                                    boxShadow: '0 0 8px rgba(0,0,0,0.2)',
+                                                    transition: 'background-color 0.3s ease',
+                                                }}
+                                                title="Click để thay đổi trạng thái"
+                                            >
+                                                {food.status ? 'Hoạt động' : 'Tạm dừng'}
                                             </span>
-                                    </td>
-                                    <td>
-                                        <button className="btn btn-sm btn-outline-primary me-2" onClick={() => handleEdit(food)}>Sửa</button>
-                                        <button
-                                            className={`btn btn-sm ${food.active ? 'btn-outline-danger' : 'btn-outline-success'}`}
-                                            onClick={() => handleToggle(food.id)}
-                                        >
-                                            {food.active ? 'Ẩn' : 'Hiện'}
-                                        </button>
-                                    </td>
-                                </tr>
-                            ))}
-                            {foods.length === 0 && (
-                                <tr>
-                                    <td colSpan="6" className="text-muted py-3">Không có món nào.</td>
-                                </tr>
-                            )}
+                                        </td>
+                                        <td style={{ verticalAlign: 'middle' }}>
+                                            <button
+                                                className="btn btn-sm"
+                                                onClick={() => handleEdit(food)}
+                                                style={{
+                                                    backgroundColor: goldenColor,
+                                                    color: 'white',
+                                                    borderRadius: borderRadius,
+                                                    fontWeight: '600',
+                                                    padding: '0.25rem 0.6rem',
+                                                    marginRight: '0.3rem',
+                                                    boxShadow: `0 0 6px ${goldenColor}`,
+                                                    transition: 'background-color 0.3s ease',
+                                                }}
+                                                onMouseEnter={e => (e.currentTarget.style.backgroundColor = '#b38f19')}
+                                                onMouseLeave={e => (e.currentTarget.style.backgroundColor = goldenColor)}
+                                            >
+                                                Sửa
+                                            </button>
+                                        </td>
+                                    </tr>
+                                ))}
                             </tbody>
                         </table>
                     </div>
 
-                    {totalPages > 1 && (
-                        <nav className="mt-4">
-                            <ul className="pagination justify-content-center">
-                                {Array.from({ length: totalPages }, (_, i) => (
-                                    <li key={i} className={`page-item ${currentPage === i + 1 ? 'active' : ''}`}>
-                                        <button className="page-link" onClick={() => setCurrentPage(i + 1)}>
-                                            {i + 1}
-                                        </button>
-                                    </li>
-                                ))}
-                            </ul>
-                        </nav>
-                    )}
+                    {/* Pagination */}
+                    <nav className="d-flex justify-content-center mt-4">
+                        <ul className="pagination pagination-sm">
+                            <li className={`page-item ${currentPage === 1 ? 'disabled' : ''}`}>
+                                <button
+                                    className="page-link"
+                                    onClick={() => setCurrentPage(p => Math.max(p - 1, 1))}
+                                    style={{ borderRadius: borderRadius }}
+                                >
+                                    &laquo;
+                                </button>
+                            </li>
+                            {[...Array(totalPages)].map((_, idx) => (
+                                <li
+                                    key={idx}
+                                    className={`page-item ${currentPage === idx + 1 ? 'active' : ''}`}
+                                >
+                                    <button
+                                        className="page-link"
+                                        onClick={() => setCurrentPage(idx + 1)}
+                                        style={{ borderRadius: borderRadius }}
+                                    >
+                                        {idx + 1}
+                                    </button>
+                                </li>
+                            ))}
+                            <li className={`page-item ${currentPage === totalPages ? 'disabled' : ''}`}>
+                                <button
+                                    className="page-link"
+                                    onClick={() => setCurrentPage(p => Math.min(p + 1, totalPages))}
+                                    style={{ borderRadius: borderRadius }}
+                                >
+                                    &raquo;
+                                </button>
+                            </li>
+                        </ul>
+                    </nav>
                 </>
             )}
         </div>

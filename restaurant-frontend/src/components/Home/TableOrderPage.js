@@ -357,26 +357,64 @@ const TableOrderPage = () => {
             ) : (
 
                 <>
-                    <button
-                        onClick={() => {
-                            const newParams = new URLSearchParams(searchParams);
-                            newParams.delete('table_id');
-                            setSearchParams(newParams);
-                            setSelectedTable(null);
-                            setOrderItems([]);
-                            setMenuItems([]);
-                        }}
-                        style={{ marginBottom: '12px' }}
-                    >
-                        ← Quay lại danh sách bàn
-                    </button>
-                    {/* Button to show the Table Select modal */}
-                    <button
-                        onClick={() => setShowChangeTableModal(true)}
-                        style={{ marginBottom: '12px' }}
-                    >
-                        Chuyển bàn
-                    </button>
+                    <div style={{ display: 'flex', gap: '12px', marginBottom: '16px' }}>
+    <button
+        onClick={() => {
+            const newParams = new URLSearchParams(searchParams);
+            newParams.delete('table_id');
+            setSearchParams(newParams);
+            setSelectedTable(null);
+            setOrderItems([]);
+            setMenuItems([]);
+        }}
+        style={{
+            padding: '10px 20px',
+            borderRadius: '8px',
+            fontSize: '16px',
+            fontFamily: 'Segoe UI, sans-serif',
+            backgroundColor: '#fff8e1',          // vàng nhạt
+            color: '#000',
+            border: '1px solid #e0c97f',
+            cursor: 'pointer',
+            boxShadow: '0 2px 6px rgba(0, 0, 0, 0.1)',
+            transition: 'background-color 0.3s, color 0.3s',
+        }}
+        onMouseEnter={e => {
+            e.target.style.backgroundColor = '#f7e6ab';
+        }}
+        onMouseLeave={e => {
+            e.target.style.backgroundColor = '#fff8e1';
+        }}
+    >
+        ← Quay lại danh sách bàn
+    </button>
+
+    <button
+        onClick={() => setShowChangeTableModal(true)}
+        style={{
+            padding: '10px 20px',
+            borderRadius: '8px',
+            fontSize: '16px',
+            fontFamily: 'Segoe UI, sans-serif',
+            backgroundColor: '#1a1a1a',           // đen sang
+            color: '#fbeeca',                     // vàng nhạt
+            border: '1px solid #c9aa5f',
+            cursor: 'pointer',
+            boxShadow: '0 2px 6px rgba(0, 0, 0, 0.1)',
+            transition: 'background-color 0.3s, color 0.3s',
+        }}
+        onMouseEnter={e => {
+            e.target.style.backgroundColor = '#333';
+        }}
+        onMouseLeave={e => {
+            e.target.style.backgroundColor = '#1a1a1a';
+        }}
+    >
+        Chuyển bàn
+    </button>
+</div>
+
+
 
                     {/* Table Select Modal */}
                     {showChangeTableModal && (

@@ -5,6 +5,7 @@ import axios from 'axios';
 function LoginPage() {
   const [staffCode, setStaffCode] = useState('');
   const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false); // <-- thêm dòng này
   const navigate = useNavigate();
 
   const handleLogin = async (e) => {
@@ -16,7 +17,7 @@ function LoginPage() {
       });
 
       const { redirect } = response.data;
-      navigate(redirect); // Redirect user
+      navigate(redirect);
     } catch (error) {
       alert('Login failed!');
       console.error(error);
@@ -80,6 +81,11 @@ function LoginPage() {
           box-shadow: 0 0 0 0.2rem rgba(212, 175, 55, 0.25);
           outline: none;
         }
+
+        .form-check-label {
+          font-size: 0.85rem;
+          color: #555;
+        }
       `}</style>
 
       <div className="login-card">
@@ -102,13 +108,25 @@ function LoginPage() {
           <div className="mb-3">
             <label className="form-label">Password</label>
             <input
-              type="password"
+              type={showPassword ? 'text' : 'password'}
               className="form-control"
               placeholder="Enter your password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
             />
+            <div className="form-check mt-2">
+              <input
+                className="form-check-input"
+                type="checkbox"
+                id="showPasswordCheck"
+                checked={showPassword}
+                onChange={() => setShowPassword(!showPassword)}
+              />
+              <label className="form-check-label" htmlFor="showPasswordCheck">
+                Show Password
+              </label>
+            </div>
           </div>
 
           <button type="submit" className="btn login-btn w-100">

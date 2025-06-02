@@ -1,4 +1,4 @@
-// import React from 'react';
+// // import React from 'react';
 // import axios from 'axios';
 
 // const OrderSummary = ({
@@ -36,6 +36,8 @@
 //       <style>{`
 //         .order-table {
 //           width: 100%;
+//           max-width: 900px;
+//           margin: 0 auto;
 //           border-collapse: collapse;
 //           font-family: 'Playfair Display', serif;
 //           background-color: #F8F5F0;
@@ -56,14 +58,12 @@
 //           border-bottom: 1px solid #A3B4C4;
 //         }
 
-//         /* Cột số lượng to hơn */
 //         .quantity-cell {
-//           width: 150px; /* Tăng chiều rộng cột */
+//           width: 150px;
 //           text-align: center;
-//           font-size: 18px; /* Chữ to hơn */
+//           font-size: 18px;
 //         }
 
-//         /* Nút +/- to, đẹp */
 //         .quantity-cell button {
 //           width: 32px;
 //           height: 32px;
@@ -139,7 +139,7 @@
 //           <thead>
 //             <tr>
 //               <th>Món</th>
-//               <th>Số lượng</th>
+//               <th className="quantity-cell">Số lượng</th>
 //               <th>Giá</th>
 //               <th>Tổng</th>
 //               {!shouldHideDeleteColumn && <th>Xóa</th>}
@@ -223,11 +223,13 @@
 //                     {item.is_sent && item.kitchen_status === 'đã làm xong' ? (
 //                       <input
 //                         type="checkbox"
-//                         className="checkbox"
 //                         checked={item.is_ready}
 //                         onChange={() => toggleServedStatus(item.id)}
+//                         className="checkbox"
 //                       />
-//                     ) : '-'}
+//                     ) : (
+//                       '-'
+//                     )}
 //                   </td>
 //                 )}
 //               </tr>
@@ -310,52 +312,65 @@ const OrderSummary = ({
           width: 100%;
           max-width: 900px;
           margin: 0 auto;
-          border-collapse: collapse;
-          font-family: 'Playfair Display', serif;
-          background-color: #F8F5F0;
+          border-collapse: separate;
+          border-spacing: 0;
+          font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+          background-color: #FBF9F0;
           border: 1px solid #A3B4C4;
-          border-radius: 8px;
+          border-radius: 12px;
           overflow: hidden;
+          box-shadow: 0 4px 10px rgba(85,107,47,0.15);
         }
 
         .order-table th {
           background-color: #556B2F;
           color: #fff;
-          padding: 12px;
+          padding: 14px 16px;
           font-size: 16px;
+          font-weight: 700;
+          text-align: left;
+          user-select: none;
         }
 
         .order-table td {
-          padding: 10px;
-          border-bottom: 1px solid #A3B4C4;
+          padding: 12px 16px;
+          border-bottom: 1px solid #D9E2D1;
+          color: #2E3A21;
+          font-size: 15px;
+        }
+
+        .order-table tr:last-child td {
+          border-bottom: none;
         }
 
         .quantity-cell {
-          width: 150px;
+          width: 160px;
           text-align: center;
           font-size: 18px;
+          font-weight: 600;
         }
 
         .quantity-cell button {
-          width: 32px;
-          height: 32px;
-          font-size: 18px;
+          width: 36px;
+          height: 36px;
+          font-size: 20px;
           padding: 0;
-          margin: 0 6px;
-          border-radius: 6px;
+          margin: 0 8px;
+          border-radius: 8px;
           background-color: #556B2F;
           color: white;
           border: none;
           cursor: pointer;
-          transition: background-color 0.3s ease;
+          transition: background-color 0.25s ease;
+          user-select: none;
         }
 
         .quantity-cell button:hover:enabled {
-          background-color: #6e8b3d;
+          background-color: #738E3F;
         }
 
         .quantity-cell button:disabled {
-          background-color: #a0a0a0;
+          background-color: #A0A080;
           cursor: not-allowed;
         }
 
@@ -363,51 +378,77 @@ const OrderSummary = ({
           background-color: #556B2F;
           color: white;
           border: none;
-          border-radius: 4px;
-          padding: 4px 10px;
-          transition: background-color 0.3s ease;
+          border-radius: 6px;
+          padding: 6px 14px;
+          font-weight: 600;
+          font-size: 14px;
+          transition: background-color 0.25s ease;
+          cursor: pointer;
+          user-select: none;
         }
 
         .order-table td button:hover {
-          background-color: #6e8b3d;
+          background-color: #738E3F;
+        }
+
+        .order-table td button:disabled {
+          background-color: #A0A080;
+          cursor: not-allowed;
         }
 
         .send-kitchen-button {
-          padding: 12px 24px;
+          margin: 24px auto 0;
+          display: block;
+          padding: 14px 28px;
           background-color: #556B2F;
           color: white;
           border: none;
-          border-radius: 8px;
-          font-size: 16px;
-          transition: box-shadow 0.3s ease, background-color 0.3s ease;
+          border-radius: 12px;
+          font-size: 18px;
+          font-weight: 700;
+          box-shadow: 0 6px 12px rgba(85,107,47,0.25);
+          transition: background-color 0.3s ease, box-shadow 0.3s ease;
           cursor: pointer;
+          user-select: none;
         }
 
         .send-kitchen-button:hover {
-          background-color: #6e8b3d;
-          box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+          background-color: #738E3F;
+          box-shadow: 0 8px 18px rgba(85,107,47,0.35);
         }
 
         .checkbox {
-          width: 20px;
-          height: 20px;
-          border: 2px solid #556B2F;
+          width: 22px;
+          height: 22px;
+          border: 2.5px solid #556B2F;
           border-radius: 50%;
           appearance: none;
           cursor: pointer;
+          transition: background-color 0.25s ease, border-color 0.25s ease;
+          vertical-align: middle;
         }
 
         .checkbox:checked {
           background-color: #A3B4C4;
+          border-color: #40513B;
+        }
+
+        /* Scroll horizontal on small screens */
+        @media (max-width: 720px) {
+          .order-table {
+            display: block;
+            overflow-x: auto;
+            white-space: nowrap;
+          }
         }
       `}</style>
 
-      <h4>Đơn hàng</h4>
+      <h4 style={{ fontFamily: "'Helvetica Neue', Helvetica, Arial, sans-serif", color: '#556B2F' }}>Đơn hàng</h4>
 
       {orderItems.length === 0 ? (
-        <p>Chưa có món nào được chọn</p>
+        <p style={{ fontFamily: "'Helvetica Neue', Helvetica, Arial, sans-serif", color: '#556B2F' }}>Chưa có món nào được chọn</p>
       ) : (
-        <table className="order-table">
+        <table className="order-table" cellSpacing="0" cellPadding="0">
           <thead>
             <tr>
               <th>Món</th>
@@ -435,8 +476,9 @@ const OrderSummary = ({
                       )
                     }
                     disabled={item.is_sent}
+                    aria-label={`Giảm số lượng món ${item.name}`}
                   >
-                    -
+                    −
                   </button>
                   {item.quantity}
                   <button
@@ -450,6 +492,7 @@ const OrderSummary = ({
                       )
                     }
                     disabled={item.is_sent}
+                    aria-label={`Tăng số lượng món ${item.name}`}
                   >
                     +
                   </button>
@@ -461,20 +504,20 @@ const OrderSummary = ({
                     <button
                       onClick={() => handleDeleteItem(item)}
                       style={{
-                        backgroundColor: 'red',
+                        backgroundColor: '#B71C1C',
                         color: 'white',
-                        border: 'none',
-                        borderRadius: '3px',
-                        cursor: 'pointer',
+                        borderRadius: '6px',
+                        fontWeight: '700',
                       }}
                       disabled={item.is_sent && item.kitchen_status !== 'đang chờ'}
+                      aria-label={`Xóa món ${item.name}`}
                     >
                       X
                     </button>
                   </td>
                 )}
                 {!shouldHideStatusColumn && (
-                  <td>
+                  <td style={{ fontWeight: '600' }}>
                     {!item.is_ready && (
                       <>
                         {item.kitchen_status === 'đang chờ' && (
@@ -498,6 +541,7 @@ const OrderSummary = ({
                         checked={item.is_ready}
                         onChange={() => toggleServedStatus(item.id)}
                         className="checkbox"
+                        aria-label={`Đánh dấu món ${item.name} đã hoàn thành`}
                       />
                     ) : (
                       '-'
@@ -508,27 +552,17 @@ const OrderSummary = ({
             ))}
             <tr>
               <td
-                colSpan={
-                  4 +
-                  (!shouldHideDeleteColumn ? 1 : 0) +
-                  (!shouldHideStatusColumn ? 1 : 0) +
-                  (canShowCheckbox ? 1 : 0)
-                }
-                style={{
-                  textAlign: 'right',
-                  fontWeight: 'bold',
-                }}
-              >
-                Tổng cộng:
-              </td>
-              <td style={{ fontWeight: 'bold' }}>
-                {totalAmount.toLocaleString('vi-VN')}₫
-              </td>
+                colSpan="3" style={{ textAlign: 'right', fontWeight: 'bold' }}>Tổng cộng:</td>
+              <td style={{ fontWeight: 'bold' }}>{totalAmount.toLocaleString('vi-VN')}₫</td>
             </tr>
           </tbody>
         </table>
       )}
-
+      {canShowCheckbox && newItemsToSend.length > 0 && (
+        <button className="send-kitchen-button" onClick={handleSendOrderToKitchen}>
+          Gửi món mới đến bếp
+        </button>
+      )}
       {newItemsToSend.length > 0 && (
         <div style={{ marginTop: '16px' }}>
           <button

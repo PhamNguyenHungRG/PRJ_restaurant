@@ -10,7 +10,7 @@ const TableSelect = ({
     orderItems,
     setShowChangeTableModal,
     selectedTable,
-    fetchTables // ✅ thêm
+    fetchTables
 }) => {
     const [availableTables, setAvailableTables] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -54,14 +54,18 @@ const TableSelect = ({
         try {
             await axios.put('http://localhost:8000/api/orders/change-table', payload);
 
+            // Cập nhật lại thông tin bàn mới
             const resTable = await axios.get(`http://localhost:8000/api/tables/${newTableId}`);
             setSelectedTable(resTable.data);
 
+            // Lấy lại đơn hàng theo bàn mới
             const resOrders = await axios.get(`http://localhost:8000/api/orders/by-table?table_id=${newTableId}`);
             setOrderItems(resOrders.data);
 
-            fetchTables(); // ✅ cập nhật trạng thái màu các bàn
+            // Cập nhật màu sắc bàn
+            fetchTables();
 
+            // Cập nhật URL
             const newParams = new URLSearchParams(searchParams);
             newParams.set('table_id', newTableId);
             setSearchParams(newParams);
@@ -69,7 +73,6 @@ const TableSelect = ({
             alert('Đơn hàng đã được chuyển sang bàn mới');
             setNewTableId('');
             setShowChangeTableModal(false);
-
         } catch (err) {
             console.error('Lỗi khi chuyển bàn:', err.response?.data || err);
             const errorMessage = err.response?.data?.message || err.message || 'Có lỗi xảy ra khi chuyển bàn';
@@ -79,11 +82,11 @@ const TableSelect = ({
 
     return (
         <div>
-            <h1>Chọn bàn mới</h1>
+            <h4>Chọn bàn mới</h4>
             {loading ? (
                 <p>Đang tải danh sách bàn...</p>
             ) : error ? (
-                <p style={{ color: 'red' }}>{error}</p>
+                <p className="text-danger">{error}</p>
             ) : availableTables.length === 0 ? (
                 <p>Hiện tại không có bàn trống nào.</p>
             ) : (
@@ -92,9 +95,9 @@ const TableSelect = ({
                         onChange={e => setNewTableId(e.target.value)}
                         value={newTableId}
                         className="form-select me-2"
-                        style={{ width: '150px' }}  // chiều rộng cố định 150px
+                        style={{ width: '160px' }}
                     >
-                        <option value="">Chọn bàn</option>
+                        <option value="">-- Chọn bàn --</option>
                         {availableTables.map(table => (
                             <option key={table.id} value={table.id}>
                                 Bàn {table.table_number}
@@ -102,14 +105,16 @@ const TableSelect = ({
                         ))}
                     </select>
 
-                    <button onClick={handleChangeTable} >
+                    <button className="btn btn-success" onClick={handleChangeTable}>
                         Xác nhận chuyển bàn
                     </button>
-                    <button onClick={() => setShowChangeTableModal(false)} style={{ marginLeft: '10px', backgroundColor: 'red', color: 'white' }}>
+                    <button
+                        className="btn btn-danger ms-2"
+                        onClick={() => setShowChangeTableModal(false)}
+                    >
                         Hủy
                     </button>
                 </div>
-
             )}
         </div>
     );
