@@ -17,11 +17,11 @@ const InventoryStats = () => {
         const currentYear = new Date().getFullYear();
 
         if (period === 'day') {
-          url = `/api/reports/daily?date=${today}`;
+          url = `http://localhost:8000/api/reports/daily?date=${today}`;
         } else if (period === 'month') {
-          url = `/api/reports/monthly?month=${currentMonth}`;
+          url = `http://localhost:8000/api/reports/monthly?month=${currentMonth}`;
         } else if (period === 'year') {
-          url = `/api/reports/yearly?year=${currentYear}`;
+          url = `http://localhost:8000/api/reports/yearly?year=${currentYear}`;
         }
 
         const response = await axios.get(url);
@@ -43,7 +43,7 @@ const InventoryStats = () => {
   const handleShowDetail = async (date) => {
     try {
       setSelectedDate(date);
-      const res = await axios.get(`/api/inventory-receipts?date=${date}`);
+      const res = await axios.get(`http://localhost:8000/api/inventory-receipts?date=${date}`);
       setDetails(res.data || []);
       setShowModal(true);
     } catch (err) {

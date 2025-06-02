@@ -9,7 +9,7 @@ const ExportForm = () => {
   const [message, setMessage] = useState(null); // { type: 'success' | 'danger', text: string }
 
   useEffect(() => {
-    axios.get('/ingredients')
+    axios.get('http://localhost:8000/api/ingredients')
       .then(res => setIngredients(res.data))
       .catch(err => {
         console.error(err);
@@ -26,7 +26,7 @@ const ExportForm = () => {
     }
 
     try {
-      await axios.post('/inventory-waste', {
+      await axios.post('http://localhost:8000/api/inventory-waste', {
         ingredient_id: selectedIngredient,
         quantity: parseFloat(quantity),
         reason,

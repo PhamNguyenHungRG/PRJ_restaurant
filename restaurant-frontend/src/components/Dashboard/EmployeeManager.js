@@ -15,8 +15,10 @@ const EmployeeManager = () => {
 
     const fetchRoles = async () => {
         try {
-            const res = await fetch('http://localhost:8000/api/dashboard/roles');
+            const res = await fetch('http://localhost:8000/api/dashboard/dashboard/roles');
+            if (!res.ok) throw new Error('Failed to fetch roles');
             const data = await res.json();
+            console.log('Dữ liệu roles:', data); // Kiểm tra console
             setRoles(data);
         } catch (err) {
             console.error('Lỗi tải vai trò:', err);
@@ -26,6 +28,7 @@ const EmployeeManager = () => {
     const fetchEmployees = async () => {
         try {
             const res = await fetch('http://localhost:8000/api/dashboard/users');
+            if (!res.ok) throw new Error('Failed to fetch employees');
             const data = await res.json();
             setEmployees(data);
         } catch (err) {
@@ -48,9 +51,7 @@ const EmployeeManager = () => {
         try {
             await fetch(url, {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
+                headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(payload),
             });
 
@@ -66,7 +67,7 @@ const EmployeeManager = () => {
         setForm({
             name: employee.name,
             staff_code: employee.staff_code,
-            role_id: employee.role_id,
+            role_id: String(employee.role_id), // Đảm bảo là chuỗi
             password: '',
         });
         setEditingId(employee.id);
@@ -123,11 +124,15 @@ const EmployeeManager = () => {
                             required
                         >
                             <option value="">-- Chọn vai trò --</option>
-                            {roles.map((role) => (
-                                <option key={role.id} value={role.id}>
-                                    {role.role_name}
-                                </option>
-                            ))}
+                            {roles.length > 0 ? (
+                                roles.map((role) => (
+                                    <option key={role.id} value={role.id}>
+                                        {role.role_name}
+                                    </option>
+                                ))
+                            ) : (
+                                <option disabled>Không có vai trò</option>
+                            )}
                         </select>
                     </div>
                     <div className="col-md-3">
@@ -150,35 +155,41 @@ const EmployeeManager = () => {
                 <div className="table-responsive">
                     <table className="table table-bordered table-hover">
                         <thead className="table-light">
-                        <tr className="text-center">
-                            <th>Tên</th>
-                            <th>Mã</th>
-                            <th>Vai trò</th>
-                            <th>Trạng thái</th>
-                            <th>Hành động</th>
-                        </tr>
+                            <tr className="text-center">
+                                <th>Tên</th>
+                                <th>Mã</th>
+                                <th>Vai trò</th>
+                                <th>Trạng thái</th>
+                                <th>Hành động</th>
+                            </tr>
                         </thead>
                         <tbody>
-                        {employees.map((emp) => (
-                            <tr key={emp.id}>
-                                <td>{emp.name}</td>
-                                <td>{emp.staff_code}</td>
-                                <td>{emp.role?.role_name || 'Không rõ'}</td>
-                                <td className="text-center">
-                                    <span className={`badge bg-${emp.active ? 'success' : 'secondary'}`}>
-                                        {emp.active ? 'Hoạt động' : 'Ẩn'}
-                                    </span>
-                                </td>
-                                <td className="text-center">
-                                    <button className="btn btn-sm btn-outline-info me-2" onClick={() => handleEdit(emp)}>
-                                        Sửa
-                                    </button>
-                                    <button className="btn btn-sm btn-outline-warning" onClick={() => handleToggle(emp.id)}>
-                                        Đổi trạng thái
-                                    </button>
-                                </td>
-                            </tr>
-                        ))}
+                            {employees.map((emp) => (
+                                <tr key={emp.id}>
+                                    <td>{emp.name}</td>
+                                    <td>{emp.staff_code}</td>
+                                    <td>{emp.role?.role_name || 'Không rõ'}</td>
+                                    <td className="text-center">
+                                        <span className={`badge bg-${emp.active ? 'success' : 'secondary'}`}>
+                                            {emp.active ? 'Hoạt động' : 'Ẩn'}
+                                        </span>
+                                    </td>
+                                    <td className="text-center">
+                                        <button
+                                            className="btn btn-sm btn-outline-info me-2"
+                                            onClick={() => handleEdit(emp)}
+                                        >
+                                            Sửa
+                                        </button>
+                                        <button
+                                            className="btn btn-sm btn-outline-warning"
+                                            onClick={() => handleToggle(emp.id)}
+                                        >
+                                            Đổi trạng thái
+                                        </button>
+                                    </td>
+                                </tr>
+                            ))}
                         </tbody>
                     </table>
                 </div>

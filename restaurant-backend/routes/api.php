@@ -8,9 +8,14 @@ use App\Http\Controllers\OrderDetailController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CashierController;
+use App\Models\Role;
 
 Route::get('/dashboard-data', [DashboardController::class, 'dashboardData']);
 Route::prefix('dashboard')->group(function () {
+   Route::get('/dashboard-data', [DashboardController::class, 'dashboardData']);
+    Route::get('/dashboard-data/custom-comparison', [DashboardController::class, 'customComparison']);
+
+
     // Food
     Route::get('/foods', [DashboardController::class, 'getFoods']);
     Route::post('/foods', [DashboardController::class, 'createFood']);
@@ -28,7 +33,9 @@ Route::prefix('dashboard')->group(function () {
     Route::post('/users', [DashboardController::class, 'createUser']);
     Route::post('/users/{id}', [DashboardController::class, 'updateUser']);
     Route::patch('/users/{id}/toggle', [DashboardController::class, 'toggleUserStatus']);
+    
     Route::get('/dashboard/roles', function () {
+        
         return \App\Models\Role::all();
     });
 
@@ -70,6 +77,32 @@ Route::prefix('cashier')->group(function () {
     Route::get('/orders/{id}', [CashierController::class, 'show']);         // Lấy chi tiết hóa đơn
     Route::post('/orders/{id}/complete', [CashierController::class, 'complete']); // Hoàn tất thanh toán
 });
+use App\Http\Controllers\IngredientController;
+use App\Http\Controllers\InventoryController;
+use App\Http\Controllers\WasteController;
+use App\Http\Controllers\InventoryStatsController;
+
+// Nguyên liệu
+Route::apiResource('ingredients', IngredientController::class);
+Route::get('ingredients-by-category/{id}', [IngredientController::class, 'byCategory']);
+
+// Nhập kho
+Route::apiResource('inventory-receipts', InventoryController::class);
+Route::get('inventory-receipts-by-date', [InventoryController::class, 'getByDate']);
+
+// Tiêu hủy (Xuất kho)
+Route::apiResource('inventory-waste', WasteController::class);
+Route::get('destructions-by-date', [WasteController::class, 'getByDate']); // ✅ MỚI
+
+// Thống kê nhập
+Route::get('reports/daily', [InventoryStatsController::class, 'daily']);
+Route::get('reports/monthly', [InventoryStatsController::class, 'monthly']);
+Route::get('reports/yearly', [InventoryStatsController::class, 'yearly']);
+
+// Thống kê tiêu hủy ✅ MỚI
+Route::get('reports/destruction/daily', [InventoryStatsController::class, 'destructionDaily']);
+Route::get('reports/destruction/monthly', [InventoryStatsController::class, 'destructionMonthly']);
+Route::get('reports/destruction/yearly', [InventoryStatsController::class, 'destructionYearly']);
 
 
 

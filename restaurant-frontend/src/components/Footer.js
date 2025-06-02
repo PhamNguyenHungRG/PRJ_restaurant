@@ -32,15 +32,12 @@ const Footer = ({ user, onLogout, onShowLogin }) => {
 
         {/* Auth Button */}
         <div className="footer-auth">
-          {user ? (
-            <button className="footer-button" onClick={onLogout}>
-              <FaSignOutAlt /> <span>Đăng xuất</span>
-            </button>
-          ) : (
-            <button className="footer-button" onClick={onShowLogin}>
-              <FaSignInAlt /> <span>Đăng nhập</span>
-            </button>
-          )}
+          <button className="footer-button" onClick={() => {
+            if (onLogout) onLogout(); // gọi hàm logout nếu cần
+            window.location.href = 'http://localhost:3000'; // chuyển hướng
+          }}>
+            <FaSignOutAlt /> <span>Đăng xuất</span>
+          </button>
         </div>
       </div>
 

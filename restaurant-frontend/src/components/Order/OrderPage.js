@@ -298,131 +298,288 @@ const OrderPage = () => {
 
 
     return (
-        <div style={{ padding: '20px', display: 'flex', gap: '30px' }}>
-            <div style={{flex: 1}}>
-                <h2>Trang gọi món cho bàn {tableInfo?.table_number || id}</h2>
+        <div style={{
+            maxWidth: 1200,
+            margin: '20px auto',
+            padding: 20,
+            fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif",
+            color: '#333',
+        }}>
+            <header style={{ marginBottom: 30, textAlign: 'center' }}>
+                <h1 style={{ fontWeight: '700', fontSize: '2rem', color: '#2c3e50' }}>
+                    Gọi món cho bàn <span style={{ color: '#e67e22' }}>{tableInfo?.table_number || id}</span>
+                </h1>
+                <p style={{ fontSize: '1rem', color: '#7f8c8d' }}>
+                    Trạng thái bàn:
+                    <span style={{
+                        fontWeight: '600',
+                        marginLeft: 8,
+                        color:
+                            tableInfo?.status === 'đã làm xong' ? '#27ae60' :
+                                tableInfo?.status === 'đã gửi bếp' ? '#2980b9' :
+                                    tableInfo?.status === 'đang order' ? '#f39c12' : '#95a5a6'
+                    }}>
+                        {tableInfo?.status || 'Chưa có trạng thái'}
+                    </span>
+                </p>
+            </header>
 
+            <section style={{
+                display: 'flex',
+                gap: 40,
+                flexWrap: 'wrap',
+                justifyContent: 'space-between'
+            }}>
+                {/* Xác nhận số người */}
                 <div style={{
-                    marginBottom: '20px',
-                    padding: '15px',
-                    border: '1px solid #ccc',
-                    borderRadius: '8px',
-                    maxWidth: '400px'
+                    flex: '1 1 320px',
+                    background: '#fff',
+                    padding: 24,
+                    borderRadius: 12,
+                    boxShadow: '0 4px 12px rgb(0 0 0 / 0.1)'
                 }}>
-                    <label>
-                        Số người:&nbsp;
+                    <label style={{ display: 'block', marginBottom: 12, fontWeight: 600 }}>
+                        Số người
                         <input
                             type="number"
-                            min="0"
+                            min="1"
                             max="20"
                             value={people}
                             onChange={handlePeopleChange}
-                            style={{width: '60px'}}
+                            style={{
+                                display: 'block',
+                                marginTop: 6,
+                                padding: '8px 12px',
+                                fontSize: 16,
+                                borderRadius: 6,
+                                border: '1.5px solid #bdc3c7',
+                                width: 100
+                            }}
                         />
                     </label>
-                    <div style={{marginTop: '10px'}}>
-                        <button onClick={handleConfirmTable} style={{marginRight: '10px'}}>
+
+                    <div style={{ marginTop: 20, display: 'flex', gap: 12 }}>
+                        <button
+                            onClick={handleConfirmTable}
+                            style={{
+                                flex: 1,
+                                padding: '10px 0',
+                                backgroundColor: confirmed ? '#27ae60' : '#2980b9',
+                                border: 'none',
+                                borderRadius: 8,
+                                color: '#fff',
+                                fontWeight: '600',
+                                cursor: 'pointer',
+                                transition: 'background-color 0.3s'
+                            }}
+                        >
                             {confirmed ? 'Cập nhật' : 'Xác nhận bàn'}
                         </button>
-                        <button onClick={handleCancelOrder}>Huỷ</button>
+                        <button
+                            onClick={handleCancelOrder}
+                            style={{
+                                flex: 1,
+                                padding: '10px 0',
+                                backgroundColor: '#c0392b',
+                                border: 'none',
+                                borderRadius: 8,
+                                color: '#fff',
+                                fontWeight: '600',
+                                cursor: 'pointer',
+                                transition: 'background-color 0.3s'
+                            }}
+                        >
+                            Huỷ
+                        </button>
                     </div>
-                </div>
 
-                <div style={{marginBottom: '20px'}}>
-                    <button onClick={() => navigate('/')} style={{background: '#ddd'}}>
+                    <button
+                        onClick={() => navigate('/')}
+                        style={{
+                            marginTop: 24,
+                            width: '100%',
+                            padding: '10px 0',
+                            backgroundColor: '#95a5a6',
+                            border: 'none',
+                            borderRadius: 8,
+                            color: '#fff',
+                            fontWeight: '600',
+                            cursor: 'pointer'
+                        }}
+                    >
                         Quay lại trang đặt bàn
                     </button>
-                </div>
 
-            <h3>Menu</h3>
-            <div style={{display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(250px, 1fr))', gap: '15px'}}>
-                {menu.map(item => (
-                    <div key={item.id} style={{
-                        border: '1px solid #ddd',
-                        borderRadius: '8px',
-                        padding: '10px',
-                        background: '#f9f9f9'
-                    }}>
-                        <div><strong>{item.name}</strong></div>
-                        <div>{item.price.toLocaleString()} VND</div>
-                        <div>{item.category?.name || 'Chưa phân loại'}</div>
-                        <div style={{marginTop: '8px', display: 'flex', alignItems: 'center'}}>
-                        <button onClick={() => changeQuantity(item.id, -1)}>-</button>
-                                <input
-                                    type="number"
-                                    min="0"
-                                    value={quantities[item.id] || 0}
-                                    onChange={(e) =>
-                                        changeQuantity(item.id, Number(e.target.value) - (quantities[item.id] || 0))
-                                    }
-                                    style={{ width: '50px', textAlign: 'center', margin: '0 5px' }}
-                                />
-                                <button onClick={() => changeQuantity(item.id, 1)}>+</button>
-                            </div>
-                            <button style={{ marginTop: '10px', width: '100%' }} onClick={() => handleOrderFood(item)}>Gọi món</button>
+                    {message && (
+                        <div style={{
+                            marginTop: 16,
+                            backgroundColor: '#fdecea',
+                            color: '#e74c3c',
+                            padding: 12,
+                            borderRadius: 6,
+                            fontWeight: '600',
+                            fontSize: 14
+                        }}>
+                            {message}
                         </div>
-                    ))}
+                    )}
                 </div>
 
-                {message && (
-                    <div style={{ marginTop: '20px', color: 'green' }}>
-                        <strong>{message}</strong>
-                    </div>
-                )}
+                {/* Danh sách món */}
+                <div style={{
+                    flex: '2 1 600px',
+                    background: '#fff',
+                    padding: 24,
+                    borderRadius: 12,
+                    boxShadow: '0 4px 12px rgb(0 0 0 / 0.1)',
+                    maxHeight: '80vh',
+                    overflowY: 'auto'
+                }}>
+                    <h2 style={{ marginBottom: 20, fontWeight: '700', color: '#34495e' }}>Menu</h2>
+                    <div style={{
+                        display: 'grid',
+                        gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))',
+                        gap: 20
+                    }}>
+                        {menu.map(item => (
+                            <div key={item.id} style={{
+                                border: '1px solid #ddd',
+                                borderRadius: 12,
+                                padding: 16,
+                                display: 'flex',
+                                flexDirection: 'column',
+                                justifyContent: 'space-between',
+                                backgroundColor: '#fafafa',
+                                boxShadow: '0 1px 3px rgb(0 0 0 / 0.1)'
+                            }}>
+                                <div>
+                                    <h3 style={{ margin: '0 0 8px', fontWeight: 600 }}>{item.name}</h3>
+                                    <p style={{ margin: '0 0 6px', color: '#7f8c8d' }}>
+                                        {item.category?.name || 'Chưa phân loại'}
+                                    </p>
+                                    <p style={{ margin: 0, fontWeight: '700', color: '#e67e22' }}>
+                                        {item.price.toLocaleString()} VND
+                                    </p>
+                                </div>
 
-            </div>
-
-            <div style={{
-                width: '300px',
-                border: '1px solid #ccc',
-                borderRadius: '8px',
-                padding: '15px',
-                background: '#fff'
-            }}>
-                <h3>Hóa đơn tạm tính</h3>
-                {orderedItems.length === 0 ? (
-                    <p>Chưa có món nào được gọi.</p>
-                ) : (
-                    <ul style={{ listStyle: 'none', padding: 0 }}>
-                        {orderedItems.map((item, index) => (
-                            <li key={index} style={{ marginBottom: '10px' }}>
-                                {item.name} x {item.quantity} = {(item.price * item.quantity).toLocaleString()} VND
-                                {item.sent && item.kitchen_status === 'xác nhận làm' && (
-                                    <div>
-                                        <label>
-                                            <input
-                                                type="checkbox"
-                                                checked={item.kitchen_status === 'đã làm xong'}
-                                                onChange={() => toggleDone(index)}
-                                            />
-                                            &nbsp;Đã làm xong
-                                        </label>
-                                    </div>
-                                )}
-                                {item.kitchen_status === 'đã làm xong' && (
-                                    <div style={{ color: 'green', fontWeight: 'bold' }}>Hoàn tất</div>
-                                )}
-                            </li>
+                                <div style={{
+                                    marginTop: 12,
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    gap: 10,
+                                    justifyContent: 'space-between'
+                                }}>
+                                    <button
+                                        onClick={() => changeQuantity(item.id, -1)}
+                                        disabled={!quantities[item.id]}
+                                        style={{
+                                            border: 'none',
+                                            backgroundColor: '#ecf0f1',
+                                            padding: '6px 10px',
+                                            borderRadius: 6,
+                                            fontWeight: '700',
+                                            cursor: quantities[item.id] ? 'pointer' : 'not-allowed',
+                                        }}
+                                    >
+                                        –
+                                    </button>
+                                    <input
+                                        type="number"
+                                        min="0"
+                                        value={quantities[item.id] || 0}
+                                        onChange={e => setQuantities({
+                                            ...quantities,
+                                            [item.id]: Math.max(0, Number(e.target.value))
+                                        })}
+                                        style={{
+                                            width: 50,
+                                            textAlign: 'center',
+                                            fontSize: 16,
+                                            borderRadius: 6,
+                                            border: '1px solid #bdc3c7'
+                                        }}
+                                    />
+                                    <button
+                                        onClick={() => changeQuantity(item.id, 1)}
+                                        style={{
+                                            border: 'none',
+                                            backgroundColor: '#ecf0f1',
+                                            padding: '6px 10px',
+                                            borderRadius: 6,
+                                            fontWeight: '700',
+                                            cursor: 'pointer',
+                                        }}
+                                    >
+                                        +
+                                    </button>
+                                    <button
+                                        onClick={() => handleOrderFood(item)}
+                                        disabled={!quantities[item.id] || quantities[item.id] <= 0 || !confirmed}
+                                        style={{
+                                            backgroundColor: '#2980b9',
+                                            color: '#fff',
+                                            border: 'none',
+                                            borderRadius: 8,
+                                            padding: '8px 14px',
+                                            cursor: (!quantities[item.id] || quantities[item.id] <= 0 || !confirmed) ? 'not-allowed' : 'pointer',
+                                            fontWeight: '600',
+                                            transition: 'background-color 0.3s',
+                                        }}
+                                    >
+                                        Gọi món
+                                    </button>
+                                </div>
+                            </div>
                         ))}
-                    </ul>
-                )}
-                <div style={{ marginTop: '10px' }}>
-                    <strong>Tổng tiền:</strong> {calculateTotal().toLocaleString()} VND
+                    </div>
                 </div>
+            </section>
 
-                {orderedItems.length > 0 && (
-                    <>
-                        <button onClick={handleSendToKitchen} style={{ marginTop: '15px', width: '100%' }}>
-                            Gửi món mới sang bếp
-                        </button>
-                        <button onClick={handlePaymentComplete} style={{ marginTop: '10px', width: '100%', backgroundColor: 'green', color: 'white' }}>
-                            Thanh toán hoàn tất
-                        </button>
-                    </>
+            {/* Đơn đã gọi */}
+            <section style={{
+                marginTop: 40,
+                background: '#fff',
+                padding: 24,
+                borderRadius: 12,
+                boxShadow: '0 4px 12px rgb(0 0 0 / 0.1)',
+                maxWidth: 920,
+                marginLeft: 'auto',
+                marginRight: 'auto'
+            }}>
+                <h2 style={{ marginBottom: 20, fontWeight: '700', color: '#34495e' }}>Danh sách món đã gọi</h2>
+
+                {orderedItems.length === 0 ? (
+                    <p style={{ color: '#7f8c8d' }}>Chưa có món nào được gọi.</p>
+                ) : (
+                    <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+                        <thead>
+                            <tr style={{ borderBottom: '2px solid #ecf0f1' }}>
+                                <th style={{ textAlign: 'left', padding: '10px 0' }}>Tên món</th>
+                                <th style={{ textAlign: 'center', padding: '10px 0' }}>Số lượng</th>
+                                <th style={{ textAlign: 'right', padding: '10px 0' }}>Tổng tiền</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {orderedItems.map(item => (
+                                <tr key={item.id} style={{ borderBottom: '1px solid #ecf0f1' }}>
+                                    <td style={{ padding: '8px 0' }}>{item.name}</td>
+                                    <td style={{ textAlign: 'center', padding: '8px 0' }}>{item.quantity}</td>
+                                    <td style={{ textAlign: 'right', padding: '8px 0' }}>
+                                        {(item.price * item.quantity).toLocaleString()} VND
+                                    </td>
+                                </tr>
+                            ))}
+                            <tr style={{ borderTop: '2px solid #bdc3c7', fontWeight: '700' }}>
+                                <td colSpan="2" style={{ padding: '10px 0' }}>Tổng cộng</td>
+                                <td style={{ textAlign: 'right', padding: '10px 0' }}>
+                                    {orderedItems.reduce((sum, i) => sum + i.price * i.quantity, 0).toLocaleString()} VND
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
                 )}
-            </div>
+            </section>
         </div>
     );
-};
-
+}
 export default OrderPage;

@@ -12,7 +12,8 @@ import OrdersList from './components/Cashier/OrdersList';
 import InventoryStats from "./components/Dashboard/InventoryStats";
 import ImportForm from "./components/Dashboard/ImportForm";
 import IngredientList from "./components/Dashboard/IngredientList";
-
+import LoginPage from './components/LoginPage';
+import PageTitle from './components/PageTitle';
 
 
 function App() {
@@ -30,6 +31,8 @@ function App() {
     // Có thể bổ sung các role khác điều hướng tương ứng
 
     return (
+        <><PageTitle />
+        
         <Routes>
             {/* {!user ? (
                 <>
@@ -42,11 +45,12 @@ function App() {
             {/* {user.staff_code.startsWith('PV') ? (
                         <> */}
             {/* <Route path="/order" element={<TableOrderPage />} /> */}
+            <Route path="/" element={<LoginPage />} />
             <Route path="/order" element={<TableOrderPage reloadKey={reloadOrderDetail} />} />
             {/* <Route path="/kitchen" element={<KitchenView />} /> */}
             <Route path="/kitchen" element={<KitchenView triggerReload={() => setReloadOrderDetail(prev => prev + 1)} />} />
             {/* Các route khác mà user có thể truy cập */}
-            <Route path="*" element={<Navigate to="/order" replace />} />
+            {/* <Route path="*" element={<Navigate to="/order" replace />} /> */}
             {/* </>
                     ) : (
                         <> */}
@@ -76,6 +80,7 @@ function App() {
             <Route path="/category" element={<CategoryManager />} />
             <Route path="/user" element={<EmployeeManager />} />
         </Routes>
+        </>
     );
 }
 

@@ -10,7 +10,7 @@ const ImportForm = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    axios.get('/ingredients')
+    axios.get('http://localhost:8000/api/ingredients')
       .then(res => {
         setIngredients(res.data);
         setLoading(false);
@@ -51,7 +51,7 @@ const ImportForm = () => {
     }
 
     try {
-      await axios.post('/inventory-receipts', {
+      await axios.post('http://localhost:8000/api/inventory-receipts', {
         users_id: 1, // Thay bằng ID thực nếu có hệ thống đăng nhập
         receipt_date: new Date().toISOString().slice(0, 10),
         note,

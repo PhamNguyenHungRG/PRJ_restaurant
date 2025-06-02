@@ -2,51 +2,54 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\User;
 use Illuminate\Http\Request;
+use App\Models\User;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Validator;
 
 class AuthController extends Controller
 {
-    // Đăng nhập người dùng và sử dụng session
     public function login(Request $request)
     {
-        // Validate dữ liệu đầu vào
-        $validator = Validator::make($request->all(), [
+        $request->validate([
             'staff_code' => 'required',
-            'password' => 'required',
+            'password' => 'required'
         ]);
 
-        if ($validator->fails()) {
-            return response()->json($validator->errors(), 400);
-        }
-
-        // Kiểm tra mã nhân viên bắt đầu bằng "PV"
-        if (substr($request->staff_code, 0, 2) !== 'PV') {
-            return response()->json(['message' => 'Bạn không có quyền truy cập'], 403);
-        }
-
-        // Tìm user theo staff_code
         $user = User::where('staff_code', $request->staff_code)->first();
 
         if (!$user || !Hash::check($request->password, $user->password)) {
-            return response()->json(['message' => 'Sai mã nhân viên hoặc mật khẩu'], 403);
+            return response()->json(['message' => 'Invalid credentials'], 401);
         }
 
-        // Lưu thông tin người dùng vào session
-        session(['user' => $user]);
+        $roleName = $user->role->role_name;
+
+        // Xác định route frontend
+        $route = '';
+        switch ($roleName) {
+            case 'Thu Ngân':
+                $route = '/cashier';
+                break;
+            case 'Phục Vụ':
+                $route = '/order';
+                break;
+            case 'Bếp':
+                $route = '/kitchen';
+                break;
+            case 'Quản Lý':
+                $route = '/dashboard';
+                break;
+            default:
+                $route = '/';
+        }
 
         return response()->json([
-            'message' => 'Đăng nhập thành công!',
-            'user' => $user
+            'message' => 'Login successful',
+            'user' => [
+                'id' => $user->id,
+                'name' => $user->name,
+                'role' => $roleName,
+            ],
+            'redirect' => $route
         ]);
-    }
-
-    // Đăng xuất
-    public function logout(Request $request)
-    {
-        $request->session()->forget('user');
-        return response()->json(['message' => 'Đăng xuất thành công']);
     }
 }

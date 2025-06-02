@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import ImportForm from './ImportForm';
 
 const ingredientApi = {
-  getAll: () => axios.get('/api/ingredients'),
-  create: (data) => axios.post('/api/ingredients', data),
-  update: (id, data) => axios.put(`/api/ingredients/${id}`, data),
-  delete: (id) => axios.delete(`/api/ingredients/${id}`)
+  getAll: () => axios.get('http://localhost:8000/api/ingredients'),
+  create: (data) => axios.post('http://localhost:8000/api/ingredients', data),
+  update: (id, data) => axios.put(`http://localhost:8000/api/ingredients/${id}`, data),
+  delete: (id) => axios.delete(`http://localhost:8000/api/ingredients/${id}`)
 };
 
 const IngredientList = () => {
@@ -106,6 +107,8 @@ const IngredientList = () => {
   if (loading) return <p>Đang tải dữ liệu...</p>;
 
   return (
+    <>
+    <ImportForm/>
     <div className="container mt-4">
       <h2>Quản lý nguyên liệu</h2>
       <button className="btn btn-success mb-3" onClick={handleAddNew}>Thêm nguyên liệu mới</button>
@@ -206,6 +209,7 @@ const IngredientList = () => {
         </div>
       )}
     </div>
+    </>
   );
 };
 
